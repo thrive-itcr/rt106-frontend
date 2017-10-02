@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+/* CSS Document */
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar {
+  color: ghostwhite;
+  background-color: #0d3349;
+}
+
+.rt106-component {
+  border-style: solid;
+  border-width: 5px;
+  border-color: #D5D8DC;
+}
+
+.tr-active {
+  background-color: powderblue;
+}
+
+.container-fixed-height {
+  max-height: 1000px;
+}
+
+@media (max-width: 1200px) {
+  .container-fixed-height {
+    max-height: 2000px;
+  }
+}
+
+.fixed-height {
+  min-height: 750px;
+  max-height: 750px;
+}
+
+#viewers {
+  background-color: white;
+}
+
+.alert {
+  position:fixed;
+  top:70px;
+  width:calc(100vw / 2);
+  left:calc(100vw / 4);
+  z-index:9999;
+}
+
+/* Don't know whether or not the styles below to the end of the file are used... */
+#viewers .imageWrapper {
+  display: block;
+}
+.image-annotation {
+  color: #e4ad00;
+  font-weight: bold;
+  text-shadow: 1px 1px #000000
+}
+#cellinfo {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.list-group-item {
+  width: 150px;
+  padding: 0px;
+}

@@ -1,0 +1,254 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "http://needaplacetohostourschema/algorithmParameterDescriptionSchema.json",
+  "title": "Rt 106 Algorithm Parameter Description Schema",
+  "description": "Parameter description schema for algorithms in Rt 106. In Rt 106, algorithms self-describe the parameters they require.",
+
+  "definitions": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "hidden": { "type": "boolean" },
+        "advanced": { "type": "boolean" },
+        "label": { "type": "string" }
+      },
+      "required": ["description"]
+    },
+
+    "array": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["array"]
+            },
+            "default": {
+              "type": "array",
+              "items": { "type": ["number", "string"] }
+            }
+          },
+          "required": ["type", "default"]
+        }
+      ]
+    },
+
+    "boolean": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["boolean"]
+            },
+            "default": { "type": "boolean" }
+          },
+          "required": ["type", "default"]
+        }
+      ]
+    },
+
+    "enum": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["enum"]
+            },
+            "enum": {
+              "type": "array",
+              "items": { "type": ["integer", "string"] }
+            },
+            "default": {
+              "anyOf": [
+                { "type": "integer" },
+                { "type": "string" }
+              ]
+            }
+          },
+          "required": ["type", "enum", "default"]
+        }
+      ]
+    },
+
+    "image": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["image"]
+            },
+            "default": {
+              "type": "string",
+              "format": "uri"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "string",
+              "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+            },
+            "protocol" : { "type": "string" }
+          },
+          "required": ["type", "default", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "number": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["number"]
+            },
+            "minimum": { "type": "number" },
+            "maximum": { "type": "number" },
+            "default": { "type": "number" }
+          },
+          "required": ["type", "default"]
+        }
+      ]
+    },
+
+    "pixelIndex": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["pixelIndex"]
+          },
+          "default": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "required": ["type", "default"]
+        }
+      ]
+    },
+
+    "series": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["series"]
+            },
+            "default": {
+              "type": "string",
+              "format": "uri"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "string",
+              "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+            },
+            "protocol" : { "type": "string" }
+          },
+          "required": ["type", "default", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "study": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["study"]
+            },
+            "default": {
+              "type": "string",
+              "format": "uri"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+               }
+            },
+            "protocol" : {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["type", "default", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "voxelIndex": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["voxelIndex"]
+          },
+          "default": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "required": ["type", "default"]
+        }
+      ]
+    },
+
+    "parameter": {
+      "anyOf": [
+        { "$ref": "#/definitions/array" },
+        { "$ref": "#/definitions/boolean" },
+        { "$ref": "#/definitions/enum" },
+        { "$ref": "#/definitions/image" },
+        { "$ref": "#/definitions/number" },
+        { "$ref": "#/definitions/pixelIndex" },
+        { "$ref": "#/definitions/series" },
+        { "$ref": "#/definitions/study" },
+        { "$ref": "#/definitions/voxelIndex" }
+      ]
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "required": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" } 
+      }
+    }
+  },
+  "patternProperties": {
+    "^(?!(required|dependencies)$)[a-z][a-zA-Z0-9]*$": {
+      "$ref": "#/definitions/parameter"
+    }
+  }
+}

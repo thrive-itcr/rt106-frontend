@@ -1,0 +1,14 @@
+{
+  "name": "queuing",
+  "version": "1.0.0",
+  "description": "Test scripts for RabbitMQ queuing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.4.1"
+  }
+}

@@ -1,0 +1,14 @@
+.idea
+public/bower_components/*
+node_modules/*
+rt106-app/tests/demo_data_jpeg/*
+rt106-app/tests/demo_data/*
+rt106-app/tests/demo_data_updated/*
+.tags*
+.DS_Store
+npm-debug.log
+.nyc_output
+coverage
+karma-*
+.scannerwork
+

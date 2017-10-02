@@ -1,0 +1,91 @@
+{
+  "arrayNumberValues": {
+    "label" : "Array of numbers",
+    "description": "Array of integer values, e.g. a series of scales",
+    "type": "array",
+    "default": [1, 2, 3]
+  },
+  "arrayStringValues": {
+    "label": "Array of strings",
+    "description": "Array of string values, e.g. list of anatomies to segment",
+    "type": "array",
+    "default": ["Hello", "Goodbye"]
+  },
+  "arrayMixedValues": {
+    "label": "Array of mixed values",
+    "description": "Array of mixed values",
+    "type": "array",
+    "default": ["Hello", 7]
+  },
+  "aBoolean": {
+    "label": "Enable feature <>",
+    "description": "A boolean value that toggles a behavior, e.g. turn on/off deformable registration",
+    "type": "boolean",
+    "default": true
+  },
+  "anEnum": {
+    "label": "Method",
+    "description": "An enum to select from a limite set of options, e.g. types of interpolation algorithms",
+    "type": "enum",
+    "enum": ["Nearest Neighbor", "Linear", "Cubic"],
+    "default": "Nearest Neighbor"
+  },
+  "anImage": {
+    "label": "Image",
+    "description": "A single image to be processed",
+    "type": "image",
+    "default": "/patient/study/series/image",
+    "format": "DICOM",
+    "modality": "MR",
+    "protocol": "T1"
+  },
+  "aNumber": {
+    "label": "Number",
+    "description": "A numeric value for an algorithm, e.g. smoothing scale parameter measured in mm.",
+    "type": "number",
+    "default": 2.5
+  },
+  "aNumberWithLimits": {
+    "label": "Number with lower and upper limits",
+    "description": "A numeric value for an algorithm with minimum and maximum values, e.g. minimum of 0.0 and maximum of 100.0.",
+    "type": "number",
+    "minimum": 0.0,
+    "maximum": 100.0,
+    "default": 2.5
+  },
+  "aPixelIndex": {
+    "label": "Seed point",
+    "description": "Seed point for algorithm (pixel location)",
+    "type": "pixelIndex",
+    "default": [128, 128]
+  },
+  "aSeries": {
+    "label": "Series",
+    "description": "A full patient series to be processed",
+    "type": "series",
+    "default": "/patient/study/series/",
+    "format": "DICOM",
+    "modality": "MR",
+    "protocol": "T2"
+  },
+  "aMultiparametricStudy": {
+    "label": "Study",
+    "description": "A complete patient study to be processed",
+    "type": "study",
+    "default": "/patient/study/",
+    "format": "DICOM",
+    "modality": ["MR", "MR", "MR"],
+    "protocol": ["T1", "T2", "FLAIR"]
+  },
+  "aVoxelIndex": {
+    "label": "Seed point",
+    "description": "Seed point for algorithm (voxel location)",
+    "type": "voxelIndex",
+    "default": [128, 128, 0]
+  },
+  "required": ["aSeries", "aVoxelIndex"],
+  "dependencies": {
+    "anImage": ["aPixelIndex", "aNumber"],
+    "aSeries": ["aVoxelIndex"]
+  }
+}

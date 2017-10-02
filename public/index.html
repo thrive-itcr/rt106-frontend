@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="rt106">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Rt 106 Local Demonstration</title>
+
+  <!-- STYLE SHEET -->
+  <link href="css/rt106DemoRadiologyStyles.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/rt106-frontend/rt106-app/css/rt106-styles.css" rel="stylesheet" type="text/css">
+
+  <!-- THIRD-PARTY STYLE SHEETS -->
+  <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/ng-scrollbar/dist/ng-scrollbar.css" rel="stylesheet" type="text/css">
+  <link href="bower_components/angular-ui-grid/ui-grid.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div id="wrapper" ng-controller="rt106DemoRadiologyController">
+
+    <!-- NAVIGATION BAR -- EXTEND WITH YOUR OWN APP'S BUTTONS! -->
+
+    <nav class="navbar">
+      <h1 class="navbar-brand navbar-default mb=0">Route 106 Local Demonstration Application</h1>
+    </nav>
+
+    <!-- PATIENTS AND IMAGE VIEWER -->
+
+    <div id="toprow" class="container-fluid">
+      <div class="row">
+
+        <div class="col-lg-4 col-md-8 rt106-component">
+
+          <!-- PATIENT SELECTION TABS-->
+
+          <nav class="nav nav-pills nav-fill" id="patientTab" role="tablist">
+            <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#patients">Patients</a>
+            <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#patientdetails">Patient Details</a>
+          </nav>
+
+          <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane fade in active" id="patients">
+              <div id="patientsection" ng-scrollbar rebuild-on="rebuild:me" ng-init="highlightPatients=[]">
+                <table class="table">
+                  <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                  </tr>
+                  <tr ng-repeat="patient in patients" ng-init="highlightPatients[$index]=false"
+                      ng-click="highlightPatients[$index]=!highlightPatients[$index];clickPatient2(patient,highlightPatients,$index)"
+                      ng-class="{'tr-active':highlightPatients[$index]==true}">
+                    <td>{{ patient.patientName === 'UNKNOWN' ? patient.id : patient.patientName}}</td>
+                    <td>{{ patient.gender }}</td>
+                    <td>{{ patient.birthDate }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade in active" id="patientdetails">
+              <div id="detailsection" ng-scrollbar rebuild-on="rebuild:me">
+                <h3>Patient:  {{ selectedPatient.patientName }}</h3>
+                <br>
+                <table class="table">
+                  <tr>
+                    <th>Study</th>
+                    <th>Date</th>
+                  </tr>
+                  <tr ng-repeat-start="study in selectedPatient.studies" ng-click="expandStudy = !expandStudy;
+                                        clickStudy2(study, expandStudy)" ng-class="{'tr-active':expandStudy==true}"
+                                        ng-init="highlightSeries=[]">
+                    <td>{{ study.id }}</td>
+                    <td>{{ study.studyDate }}</td>
+                  </tr>
+                  <tr ng-repeat-end ng-show="expandStudy">
+                    <td colspan="2">
+                      <table class="table">
+                        <tr>
+                          <th>ID</th>
+                          <th>Modality</th>
+                          <th>Images</th>
+                        </tr>
+                        <tr ng-repeat="oneSeries in study.series" ng-click="$parent.highlightSeries[$index] = !$parent.highlightSeries[$index];
+                               clickSeries2( study, oneSeries, $parent.highlightSeries, $index )" ng-class="{'tr-active':$parent.highlightSeries[$index]==true}">
+                          <td>{{ oneSeries.id }}</td>
+                          <td>{{ oneSeries.modality }}</td>
+                          <td>{{ oneSeries.instanceCount }}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- END PATIENT SELECTION -->
+
+        <!-- IMAGE TOOLS -->
+        <div class="col-lg-2 col-md-4 rt106-component">
+          <ul class="list-group">
+            <a id="enableWindowLevelTool" class="list-group-item">WW/WC</a>
+            <a id="scroll" class="list-group-item">Scroll</a>
+            <a id="pan" class="list-group-item">Pan</a>
+            <a id="zoom" class="list-group-item">Zoom</a>
+            <a id="enableLength" class="list-group-item">Length</a>
+            <a id="probe" class="list-group-item">Probe</a>
+            <a id="circleroi" class="list-group-item">Elliptical ROI</a>
+            <a id="rectangleroi" class="list-group-item">Rectangle ROI</a>
+            <a id="angle" class="list-group-item">Angle</a>
+            <!-- <a id="highlight" class="list-group-item">Highlight</a> -->
+            <a id="freehand" class="list-group-item">Freeform ROI</a>
+            <a id="resetWWWCtoDICOM" class="list-group-item">Reset to DICOM</a>
+            <a id="resetWWWCtoData" class="list-group-item">Reset to data</a>
+          </ul>
+        </div>
+        <!-- END IMAGE TOOLS -->
+
+        <!-- IMAGE VIEWER -->
+        <div class="col-lg-6 col-md-12 rt106-component">
+          <div id="viewers" config-viewers number-of-viewers="6" viewer-width="600px" viewer-height="600px"></div>
+        </div>
+        <!-- END IMAGE VIEWER -->
+
+      </div>
+    </div>
+
+    <!-- END PATIENTS AND IMAGE VIEWER -->
+
+    <!-- ALGORITHMS AND EXECUTIONS -->
+
+    <div class="container-fluid  container-fixed-height">
+      <div class="row">
+
+        <!-- ALGORITHMS LIST -->
+        <div class="col-lg-6 col-md-12 rt106-component">
+          <h2>Algorithms</h2>
+
+          <button type="button" class="btn btn-primary" ng-disabled="disableExecute()" ng-click="requestAlgoRun()">Execute</button>
+
+          <div class="fixed-height" ng-scrollbar rebuild-on="rebuild:me">
+            <table class="table">
+              <tr>
+                <th>Algorithm</th>
+              </tr>
+              <tr ng-repeat-start="algo in algorithms | orderBy: 'name'" ng-click="expandAlgo=!expandAlgo;clickAlgo( algo, expandAlgo )" ng-class="{'tr-active':expandAlgo==true}">
+                <td>{{ algo.name }}</td>
+              </tr>
+              <tr ng-repeat-end ng-show="expandAlgo">
+                <td>
+                  <h3>Parameters</h3>
+                  <table class="table">
+                    <tr>
+                      <th>Param</th>
+                      <th>Value</th>
+                    </tr>
+                    <tr ng-repeat="param in algo.parameters">
+                      <td>{{ param.label }}</td>
+                      <td><input type="{{param.widgetType}}" ng-model="param.default"></td>
+                      <td><input type="checkbox" ng-hide="param.required" ng-model="param.include"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- END ALGORITHMS LIST -->
+
+        <!-- EXECUTION HISTORY -->
+        <div class="col-lg-6 col-md-12 rt106-component">
+          <h3>Execution History</h3>
+          <div class="fixed-height" ng-scrollbar rebuild-on="rebuild:me">
+            <table class="table">
+              <tr>
+                <th>Algorithm</th>
+                <th>Start Time</th>
+                <th>Status</th>
+              </tr>
+              <tr ng-repeat-start="execItem in executionList" ng-click="expandResult = !expandResult;clickResult(execItem,expandResult)" ng-class="{'tr-active':expandResult==true}">
+                <td>{{ execItem.analyticName }}</td>
+                <td>{{ execItem.requestTime | date : 'MMM d, yyyy h:mm a' }}</td>
+                <td>{{ execItem.status }}</td>
+              </tr>
+              <tr ng-repeat-end ng-show="expandResult">
+                <td colspan="3">
+                  <h3>Details</h3>
+                  <table class="table">
+                    <tr>
+                      <th>Source</th>
+                      <th>Result</th>
+                      <th>Value</th>
+                    </tr>
+                    <!-- Iterate through the result list here. -->
+                    <tr ng-repeat="detailItem in execItem.details">
+                      <td>{{ detailItem.source }}</td>
+                      <td>{{ detailItem.name }}</td>
+                      <td>{{ detailItem.value }}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- END EXECUTION HISTORY -->
+
+      </div>
+    </div>
+    <!-- END ALGORITHMS AND EXECUTIONS -->
+
+  </div>
+
+  <!-- THIRD-PARTY SCRIPTS -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/tether/dist/js/tether.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+  <script src="bower_components/ng-scrollbar/dist/ng-scrollbar.min.js"></script>
+  <script src="bower_components/cornerstone/dist/cornerstone.min.js"></script>
+  <script src="bower_components/cornerstoneMath/dist/cornerstoneMath.min.js"></script>
+  <script src="bower_components/cornerstoneTools/dist/cornerstoneTools.min.js"></script>
+  <script src="bower_components/dicomParser/dist/dicomParser.min.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/jpx.min.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/cornerstoneWADOImageLoader.min.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/cornerstoneHTTPDICOMImageLoader.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/tiff.min.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/tiff16.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/third-party/tiffImageLoader.js"></script>
+
+  <!-- OPEN INNOVATION PLATFORM SCRIPTS -->
+  <script src="config.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/js/rt106.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/utilityFns.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/directives/configViewers.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/cohortFactory.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/analyticsFactory.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/dynamicDisplayService.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/dynamicControlService.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/executionService.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/services/alarmService.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/js/imageViewers.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/js/cornerstoneLayers.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/js/overlayTools.js"></script>
+
+  <!-- THIS APPLICATION'S CONTROLLER -->
+  <script src="controllers/rt106DemoRadiologyController.js"></script>
+
+</body>
+
+</html>

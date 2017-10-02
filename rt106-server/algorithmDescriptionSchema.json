@@ -1,0 +1,405 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "http://needaplacetohostourschema/algorithmDescriptionSchema.json",
+  "title": "Rt 106 Algorithm Description Schema",
+  "description": "Algorithm description schema in Rt 106. In Rt 106, algorithms self-describe.",
+
+  "definitions": {
+    "meta": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "hidden": { "type": "boolean" },
+        "advanced": { "type": "boolean" },
+        "label": { "type": "string" }
+      },
+      "required": ["description"]
+    },
+
+    "array": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["array"]
+            }
+          },
+          "required": ["type"]
+        }
+      ]
+    },
+
+    "arrayDefault": {
+      "properties": {
+        "default": {
+          "type": "array",
+          "items": { "type": ["number", "string"] }
+        }
+      },
+      "required": ["default"]
+    },
+
+    "boolean": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["boolean"]
+            }
+          },
+          "required": ["type"]
+        }
+      ]
+    },
+
+    "booleanDefault": {
+      "properties": {
+        "default": { "type": "boolean" }
+      },
+      "required": ["default"]
+    },
+
+    "enum": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["enum"]
+            },
+            "enum": {
+              "type": "array",
+              "items": { "type": ["integer", "string"] }
+            }
+          },
+          "required": ["type", "enum"]
+        }
+      ]
+    },
+
+    "enumDefault": {
+      "properties": {
+        "default": {
+          "anyOf": [
+            { "type": "integer" },
+            { "type": "string" }
+          ]
+        }
+      },
+      "required": ["default"]
+    },
+
+    "image": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["image"]
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "string",
+              "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+            },
+            "protocol" : { "type": "string" }
+          },
+          "required": ["type", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "imageDefault": {
+      "properties": {
+        "default": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["default"]
+    },
+
+    "number": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["number"]
+            },
+            "minimum": { "type": "number" },
+            "maximum": { "type": "number" }
+          },
+          "required": ["type"]
+        }
+      ]
+    },
+
+    "numberDefault": {
+      "properties": {
+        "default": { "type": "number" }
+      },
+      "required": ["default"]
+    },
+
+    "pixelIndex": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["pixelIndex"]
+          }
+        },
+        "required": ["type"]
+        }
+      ]
+    },
+
+    "pixelIndexDefault": {
+      "properties": {
+        "default": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      },
+      "required": ["default"]
+    },
+
+    "series": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["series"]
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "string",
+              "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+            },
+            "protocol" : { "type": "string" }
+          },
+          "required": ["type", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "seriesDefault": {
+      "properties": {
+        "default": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["default"]
+    },
+
+    "study": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["study"]
+            },
+            "format": {
+              "type": "string",
+              "enum": ["DICOM", "TIFF"]
+            },
+            "modality": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["MR", "CT", "XR", "PT", "MICROSCOPE"]
+               }
+            },
+            "protocol" : {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["type", "format", "modality", "protocol"]
+        }
+      ]
+    },
+
+    "studyDefault": {
+      "properties": {
+        "default": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": ["default"]
+    },
+
+
+    "voxelIndex": {
+      "allOf": [
+        { "$ref": "#/definitions/meta" },
+        { "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["voxelIndex"]
+          }
+        },
+        "required": ["type"]
+        }
+      ]
+    },
+
+    "voxelIndexDefault": {
+      "properties": {
+        "default": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": ["default"]
+    },
+
+
+    "parameter": {
+      "anyOf": [
+        { "allOf": [
+          { "$ref": "#/definitions/array" },
+          { "$ref": "#/definitions/arrayDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/boolean" },
+          { "$ref": "#/definitions/booleanDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/enum" },
+          { "$ref": "#/definitions/enumDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/image" },
+          { "$ref": "#/definitions/imageDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/number" },
+          { "$ref": "#/definitions/numberDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/pixelIndex" },
+          { "$ref": "#/definitions/pixelIndexDefault" }
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/series" },
+          { "$ref": "#/definitions/seriesDefault"}
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/study" },
+          { "$ref": "#/definitions/studyDefault"}
+          ]
+        },
+        { "allOf": [
+          { "$ref": "#/definitions/voxelIndex" },
+          { "$ref": "#/definitions/voxelIndexDefault"}
+          ]
+        }
+      ]
+    },
+
+    "result": {
+      "anyOf": [
+        { "$ref": "#/definitions/array" },
+        { "$ref": "#/definitions/boolean" },
+        { "$ref": "#/definitions/enum" },
+        { "$ref": "#/definitions/image" },
+        { "$ref": "#/definitions/number" },
+        { "$ref": "#/definitions/pixelIndex" },
+        { "$ref": "#/definitions/series" },
+        { "$ref": "#/definitions/study" },
+        { "$ref": "#/definitions/voxelIndex" }
+      ]
+    }
+  },
+
+  "type": "object",
+
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "classification": { "type": "string" },
+    "queue": { "type": "string" },
+    "doc": {
+      "type": "object",
+      "properties": {
+        "short": { "type": "string" },
+        "full": { "type": "string" }
+      }
+     },
+    "api": {
+      "type": "object",
+      "properties": {
+        "context": { "type": "string" }
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!(required|dependencies)$)[a-z][a-zA-Z0-9]*$": {
+          "$ref": "#/definitions/parameter"
+        }
+      }
+    },
+    "results": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "dependencies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!(required|dependencies)$)[a-z][a-zA-Z0-9]*$": {
+          "$ref": "#/definitions/result"
+        }
+      }
+    }
+
+  }
+}

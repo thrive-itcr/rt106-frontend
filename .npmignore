@@ -1,0 +1,15 @@
+Dockerfile
+webrebuild.sh
+sonar-project.properties
+.tags
+.tags1
+.sonar
+.git
+.DS_Store
+.gitignore
+.dockerignore
+.npmignore
+rt106-app
+bower.json
+entrypoint.sh
+test

@@ -1,0 +1,65 @@
+{
+  "name": "rt106-frontend",
+  "version": "1.0.0",
+  "description": "Node server for Rt 106.",
+  "homepage": "https://github.com/pages/rt106/",
+  "main": "rt106-server/rt106-server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node rt106-server/rt106-server.js",
+    "test-server": "node_modules/.bin/mocha test/rt106-server ",
+    "coverage-server": "node_modules/.bin/nyc --reporter=text --reporter=lcov mocha test/rt106-server",
+    "coverage-app": "node_modules/.bin/karma start"
+  },
+  "author": "Brion Sarachan <sarachan@ge.com>",
+  "contributors": [
+    "Brion Sarachan <sarachan@ge.com>",
+    "Jim Miller <millerjv@ge.com>",
+    "Don Hamilton <hamilton@ge.com>",
+    "Bo Wang <bo.wang@ge.com>",
+    "Peihong Zhu <peihong.zhu@ge.com>"
+  ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.build.ge.com/rt106/rt106-frontend.git"
+  },
+  "dependencies": {
+    "amqplib": "^0.4.1",
+    "aws-sdk": "^2.12.0",
+    "bower-json": "^0.8.1",
+    "cookie-parser": "^1.4.1",
+    "cors": "^2.8.4",
+    "csvtojson": "^1.1.4",
+    "date-format": "0.0.2",
+    "express": "^4.13.4",
+    "mysql": "~2.11.1",
+    "request": "^2.81.0",
+    "request-promise": "^3.0.0",
+    "uuid": "^2.0.1",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-http": "^3.0.0",
+    "chai-things": "^0.2.0",
+    "grunt-cli": "^1.2.0",
+    "karma": "^1.7.0",
+    "karma-chai": "^0.1.0",
+    "karma-chai-as-promised": "^0.1.2",
+    "karma-chai-things": "^0.1.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-jquery": "^0.2.2",
+    "karma-mocha": "^1.3.0",
+    "karma-sinon": "^1.0.5",
+    "karma-verbose-reporter": "0.0.6",
+    "mocha": "^3.5.0",
+    "nyc": "^11.1.0",
+    "sinon": "^3.2.0"
+  }
+}
