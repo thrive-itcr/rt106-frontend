@@ -49,9 +49,7 @@
                     <th>Gender</th>
                     <th>DOB</th>
                   </tr>
-                  <tr ng-repeat="patient in patients" ng-init="highlightPatients[$index]=false"
-                      ng-click="highlightPatients[$index]=!highlightPatients[$index];clickPatient2(patient,highlightPatients,$index)"
-                      ng-class="{'tr-active':highlightPatients[$index]==true}">
+                  <tr ng-repeat="patient in patients" ng-init="highlightPatients[$index]=false" ng-click="highlightPatients[$index]=!highlightPatients[$index];clickPatient2(patient,highlightPatients,$index)" ng-class="{'tr-active':highlightPatients[$index]==true}">
                     <td>{{ patient.patientName === 'UNKNOWN' ? patient.id : patient.patientName}}</td>
                     <td>{{ patient.gender }}</td>
                     <td>{{ patient.birthDate }}</td>
@@ -70,8 +68,7 @@
                     <th>Date</th>
                   </tr>
                   <tr ng-repeat-start="study in selectedPatient.studies" ng-click="expandStudy = !expandStudy;
-                                        clickStudy2(study, expandStudy)" ng-class="{'tr-active':expandStudy==true}"
-                                        ng-init="highlightSeries=[]">
+                                        clickStudy2(study, expandStudy)" ng-class="{'tr-active':expandStudy==true}" ng-init="highlightSeries=[]">
                     <td>{{ study.id }}</td>
                     <td>{{ study.studyDate }}</td>
                   </tr>
@@ -234,7 +231,7 @@
   <script src="bower_components/rt106-frontend/rt106-app/third-party/tiff16.js"></script>
   <script src="bower_components/rt106-frontend/rt106-app/third-party/tiffImageLoader.js"></script>
 
-  <!-- OPEN INNOVATION PLATFORM SCRIPTS -->
+  <!-- Rt 106 SCRIPTS -->
   <script src="config.js"></script>
   <script src="bower_components/rt106-frontend/rt106-app/js/rt106.js"></script>
   <script src="bower_components/rt106-frontend/rt106-app/services/utilityFns.js"></script>
