@@ -441,7 +441,7 @@ if (typeof imageViewers === 'undefined') {
         cornerstoneTools.angle.deactivate(element, 1);
         cornerstoneTools.highlight.deactivate(element, 1);
         cornerstoneTools.freehand.deactivate(element, 1);
-        cornerstoneTools.brush.deactivate(element, 1);
+        //cornerstoneTools.brush.deactivate(element, 1);  // JVM - calling brush.deactivate() incorrectly causes brush to display its marker (green filled circle)
       }
       cornerstoneTools.stackScroll.deactivate(element, 1);
       cornerstoneTools.stackScrollWheel.deactivate(element); // wheel scrolls backward on Mac
@@ -506,9 +506,10 @@ if (typeof imageViewers === 'undefined') {
       cornerstoneTools.freehand.activate(element, 1);
     });
     $('#brush').click(function() {
-      activate('#brush')
-      disableAllTools();
-      cornerstoneTools.brush.activate(element, 1);
+      // disabling brush control due to issue with brush.deactivate()
+      // activate('#brush')
+      // disableAllTools();
+      // cornerstoneTools.brush.activate(element, 1);
     });
 
 
@@ -885,7 +886,7 @@ if (typeof imageViewers === 'undefined') {
           //enabledFrame.synchronizer2.addTarget(element);
           enabledFrame.synchronizer3.addTarget(element);
         }
-        
+
         return stackId;
       });
     }).catch(function(fromReject) {
