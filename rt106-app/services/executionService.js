@@ -91,7 +91,7 @@
     this.autofillRadiologyParameters = function(selectedParameters, selectedSeries) {
       // Perform any special handling required for parameters.
       // Autofill some parameters.
-      var autofillRadiologyParametersPromise = new Promise(function(resolve, reject) {
+      return new Promise(function(resolve, reject) {
         for (var paramName in selectedParameters) {
           // Handling probes / seed points.  Consider moving this to the dynamicDisplayService.
           if (selectedParameters[paramName].type == "voxelIndex") {
@@ -118,7 +118,6 @@
           }
         }
       });
-      return autofillRadiologyParametersPromise;
     }
 
     this.autofillPathologyParameters = function(selectedParameters, selectedSlide, selectedRegion, selectedChannel, selectedPipeline, forceOverwrite) {

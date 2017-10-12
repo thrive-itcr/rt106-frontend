@@ -701,9 +701,6 @@ if (typeof imageViewers === 'undefined') {
       function onNewImage(e, data) { // define new version
         var annotationLength = 30;
         $(where.viewer + ' .imageText').text("Image #" + (imageViewers.stacks[stackId].currentImageIdIndex + 1) + "/" + imageViewers.stacks[stackId].imageIds.length + (data.image.data !== undefined ? (", Instance #" + data.image.data.intString("x00200013")) : "") );
-        // if (data.image.data !== undefined) {
-        //   $(where.viewer + ' .imageText').text(" ,Instance #" + data.image.data.intString("x00200013"));
-        // }
 
         if (data.image.data === undefined) {
           if ( typeof stackId === 'string' ) {
@@ -985,14 +982,16 @@ if (typeof imageViewers === 'undefined') {
   }
 
   function getProbes(stackId) {
-    var getProbesPromise = new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject) {
       var probeList = [];
+      var promises = [];
       $.each(imageViewers.stacks[stackId].imageIds, function(index, imageId) {
         if(cornerstoneTools.globalImageIdSpecificToolStateManager.toolState[imageId] !== undefined) {
           var x = 0;
           var y = 0;
           var z = 0;
           var imgPromise = cornerstoneLayers.loadImage(imageId);
+          promises.push(imgPromise);
           imgPromise.then(function(image) {
             if (image.data !== undefined) {
               x = Math.round(cornerstoneTools.globalImageIdSpecificToolStateManager.toolState[imageId].probe.data[0].handles.end.x);
@@ -1000,14 +999,17 @@ if (typeof imageViewers === 'undefined') {
               z = image.data.intString("x00200013");
               probeList.push([x, y, z]);
             }
-            resolve(probeList);
           }).catch(function (error) {
             console.log("getProbes(), error in promise");
           });
         }
       });
+      Promise.all(promises).then(function() {
+          resolve(probeList);
+      }).catch(function(error) {
+          reject("getProbes(), error in promises: " + error);
+      })
     });
-    return getProbesPromise;
   }
 
   // module/private exports

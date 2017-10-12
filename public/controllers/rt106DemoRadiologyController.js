@@ -233,8 +233,7 @@
 
         // The Execute button is clicked.
         $scope.requestAlgoRun = function() {
-            var autofillPromise = executionService.autofillRadiologyParameters($scope.selectedParameters, $scope.selectedSeries);
-            autofillPromise.then(function() {
+            executionService.autofillRadiologyParameters($scope.selectedParameters, $scope.selectedSeries).then(function() {
               executionService.requestAlgoRun($scope.selectedParameters, $scope.selectedAlgo[0]);
             });
         }
