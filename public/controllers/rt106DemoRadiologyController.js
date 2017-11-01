@@ -155,6 +155,7 @@
             }
             cohortFactory.getSeries(patient, study).then(function(series) {
                 //$log.log('series in response:', series);
+                //console.log("Returned from cohortFactory.getSeries(): " + JSON.stringify(series));
                 for (var i = 0; i < series.length; ++i) {
                     if(!seriesIds.includes(series[i].id)){
                         $scope.patients[patientIdx].studies[studyIdx].series.push(series[i]);

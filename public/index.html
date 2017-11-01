@@ -78,13 +78,13 @@
                         <tr>
                           <th>ID</th>
                           <th>Modality</th>
-                          <th>Images</th>
+                          <th>P/D</th>
                         </tr>
                         <tr ng-repeat="oneSeries in study.series" ng-click="$parent.highlightSeries[$index] = !$parent.highlightSeries[$index];
                                clickSeries2( study, oneSeries, $parent.highlightSeries, $index )" ng-class="{'tr-active':$parent.highlightSeries[$index]==true}">
                           <td>{{ oneSeries.id }}</td>
                           <td>{{ oneSeries.modality }}</td>
-                          <td>{{ oneSeries.instanceCount }}</td>
+                          <td>{{ oneSeries.eid | seriesFilter }}</td>
                         </tr>
                       </table>
                     </td>
@@ -245,6 +245,7 @@
   <script src="bower_components/rt106-frontend/rt106-app/js/imageViewers.js"></script>
   <script src="bower_components/rt106-frontend/rt106-app/js/cornerstoneLayers.js"></script>
   <script src="bower_components/rt106-frontend/rt106-app/js/overlayTools.js"></script>
+  <script src="bower_components/rt106-frontend/rt106-app/filters/seriesFilter.js"></script>
 
   <!-- THIS APPLICATION'S CONTROLLER -->
   <script src="controllers/rt106DemoRadiologyController.js"></script>
