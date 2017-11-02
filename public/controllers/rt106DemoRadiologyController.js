@@ -25,6 +25,16 @@
 
 
         /*
+         * For testing and debugging.
+         */
+        function printInfo() {
+            console.log("$scope.patients is " + JSON.stringify($scope.patients));
+            console.log("$scope.executionList is " + JSON.stringify($scope.executionList));
+        }
+        setTimeout(printInfo, 10000);
+
+
+        /*
          * Initialization.
          */
 
@@ -158,9 +168,34 @@
                 //console.log("Returned from cohortFactory.getSeries(): " + JSON.stringify(series));
                 for (var i = 0; i < series.length; ++i) {
                     if(!seriesIds.includes(series[i].id)){
+                        series[i].timeStamp = cohortFactory.getSeriesTimeStamp(series[i], $scope.executionList);
+                        series[i].derivedFrom = cohortFactory.getSeriesDerivedFrom(series[i], $scope.executionList);
+                        if (series[i].derivedFrom != null) {
+                            console.log("returned from cohortFactory.getSeriesDerivedFrom with derivedFrom == " + series[i].derivedFrom);
+                        }
                         $scope.patients[patientIdx].studies[studyIdx].series.push(series[i]);
                     }
                 }
+                // Sort the series for the current patient/study.
+                $scope.patients[patientIdx].studies[studyIdx].series = $scope.patients[patientIdx].studies[studyIdx].series.sort(function(a, b) {
+                    var pString = "primary";
+                    var uString = "unknown";
+                    if (a.timeStamp === pString && b.timeStamp === pString)
+                        return 0;
+                    else if (a.timeStamp === pString)
+                        return -1;
+                    else if (b.timeStamp === pString)
+                        return 1;
+                    else if (a.timeStamp === uString && b.timeString === uString)
+                        return 0;
+                    else if (a.timeStamp === uString)
+                        return 1;
+                    else if (b.timeStamp === uString)
+                        return -1;
+                    else // two timestamps
+                        return a.timeStamp-b.timeStamp;
+                });
+                console.log("After calling getSeries(), the series structure is " + JSON.stringify($scope.patients[patientIdx].studies[studyIdx].series));
             })
                 .catch(function(reason){
                     console.log('Failed to load series due to ' + reason);
