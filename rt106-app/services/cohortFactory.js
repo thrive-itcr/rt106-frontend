@@ -134,31 +134,20 @@
        * If no meaningful timestamp can be found, return 0.
        */
     function getSeriesTimeStamp(seriesStruct, executionStruct) {
-        //console.log("***** TOP OF getSeriesTimeStamp() *****");
-        //console.log("getSeriesTimeStamp(), seriesStruct is " + JSON.stringify(seriesStruct));
-        //console.log("getSeriesTimeStamp(), executionStruct is " + JSON.stringify(executionStruct));
         if (seriesStruct.eid == "primary") {
-            //console.log("***** RETURN 1 FROM getSeriesTimeStamp() *****");
             return 'primary';
         } else {
             var seriesPath = seriesStruct.path;
             // Look through the execution records to find a record where this series path was a result.
             for (var e=0; e<executionStruct.length; e++) {
-                //console.log("Examining executionStruct " + JSON.stringify(executionStruct[e]));
                 var executionDetails = executionStruct[e].details;
                 for (var d=0; d<executionDetails.length; d++) {
                     var detail = executionDetails[d];
-                    //console.log("Examining details: " + JSON.stringify(detail));
                     if (detail.source == "result" && detail.value == seriesPath) {
-                        //console.log("Found match for series eid " + seriesStruct.eid);
-                        //console.log("***** RETURN 2 FROM getSeriesTimeStamp() *****");
                         return executionStruct[e].requestTime;
-                    } else {
-                        //console.log("No match found for series eid " + seriesStruct.eid);
                     }
                 }
             }
-            //console.log("***** RETURN 3 FROM getSeriesTimeStamp() *****");
             return 'unknown';
         }
     }
@@ -167,43 +156,30 @@
       // For primary series return null.
       // If the derived series cannot be determined return null.
       function getSeriesDerivedFrom(seriesStruct, executionStruct) {
-          //console.log("***** TOP OF getSeriesDerivedFrom() *****");
-          //console.log("getSeriesDerivedFrom(), seriesStruct is " + JSON.stringify(seriesStruct));
-          //console.log("getSeriesDerivedFrom(), executionStruct is " + JSON.stringify(executionStruct));
           if (seriesStruct.eid == "primary") {
-              //console.log("***** RETURN 1 FROM getSeriesDerivedFrom() *****");
               return null;
           } else {
               var seriesPath = seriesStruct.path;
               // Look through the execution records to find a record where this series path was a result.
               for (var e=0; e<executionStruct.length; e++) {
-                  //console.log("Examining executionStruct " + JSON.stringify(executionStruct[e]));
                   var derivedFrom = null;
                   var matchFound = false;
                   var executionDetails = executionStruct[e].details;
                   for (var d=0; d<executionDetails.length; d++) {
                       var detail = executionDetails[d];
-                      //console.log("Examining details: " + JSON.stringify(detail));
                       if (detail.source == "context" && detail.name == "inputSeries") {
                           derivedFrom = detail.value;
                       }
                       if (detail.source == "result" && detail.value == seriesPath) {
-                          //console.log("Found match for series eid " + seriesStruct.eid);
-                          //console.log("***** RETURN 2 FROM getSeriesDerivedFrom() *****");
                           matchFound = true;
-                      } else {
-                          //console.log("No match found for series eid " + seriesStruct.eid);
                       }
                   }
                   if (matchFound) {
-                      console.log("getSeriesDerivedFrom, matchFound! -- seriesPath is " + seriesPath + ", derivedFrom is " + derivedFrom);
                       if (derivedFrom != null) {
-                          console.log("getSeriesDerivedFrom returning " + derivedFrom);
                           return derivedFrom;
                       }
                   }
               }
-              //console.log("***** RETURN 3 FROM getSeriesDerivedFrom() *****");
               return null;
           }
       }
