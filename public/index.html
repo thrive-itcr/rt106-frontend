@@ -31,7 +31,7 @@
     <div id="toprow" class="container-fluid">
       <div class="row">
 
-        <div class="col-lg-4 col-md-8 rt106-component">
+        <div class="col-lg-5 col-md-10 rt106-component">
 
           <!-- PATIENT SELECTION TABS-->
 
@@ -123,7 +123,7 @@
                           <th>Value</th>
                         </tr>
                         <!-- Iterate through the result list here. -->
-                        <tr ng-repeat="detailItem in execItem.details">
+                        <tr class="details" ng-repeat="detailItem in execItem.details">
                           <td>{{ detailItem.source }}</td>
                           <td>{{ detailItem.name }}</td>
                           <td>{{ detailItem.value }}</td>
@@ -161,7 +161,7 @@
         <!-- END IMAGE TOOLS -->
 
         <!-- IMAGE VIEWER -->
-        <div class="col-lg-6 col-md-12 rt106-component">
+        <div class="col-lg-5 col-md-10 rt106-component">
           <div id="viewers" config-viewers number-of-viewers="6" viewer-width="600px" viewer-height="600px"></div>
         </div>
         <!-- END IMAGE VIEWER -->
@@ -177,7 +177,7 @@
       <div class="row">
 
         <!-- ALGORITHMS LIST -->
-        <div class="col-lg-6 col-md-12 rt106-component">
+        <div class="col-lg-4 col-md-8 rt106-component">
           <h2>Algorithms</h2>
 
           <button type="button" class="btn btn-primary" ng-disabled="disableExecute()" ng-click="requestAlgoRun()">Execute</button>
@@ -212,7 +212,7 @@
         <!-- END ALGORITHMS LIST -->
 
         <!-- EXECUTION HISTORY -->
-        <div class="col-lg-6 col-md-12 rt106-component">
+        <div class="col-lg-8 col-md-16 rt106-component">
           <h3>Execution History</h3>
           <div class="fixed-height" ng-scrollbar rebuild-on="rebuild:me">
             <table class="table">
@@ -236,7 +236,7 @@
                       <th>Value</th>
                     </tr>
                     <!-- Iterate through the result list here. -->
-                    <tr ng-repeat="detailItem in execItem.details">
+                    <tr class="details" ng-repeat="detailItem in execItem.details">
                       <td>{{ detailItem.source }}</td>
                       <td>{{ detailItem.name }}</td>
                       <td>{{ detailItem.value }}</td>
