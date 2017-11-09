@@ -26,6 +26,16 @@
 
 
         /*
+         * For testing and debugging.
+         */
+        function printInfo() {
+            console.log("$scope.patients is " + JSON.stringify($scope.patients));
+            console.log("$scope.executionList is " + JSON.stringify($scope.executionList));
+        }
+        //setTimeout(printInfo, 10000);
+
+
+        /*
          * Initialization.
          */
 
@@ -141,6 +151,21 @@
             //console.log("$scope.patients is " + JSON.stringify($scope.patients));
         }
 
+        /*
+         * Utility function to calculate a hash on a string, thanks to http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+         * This is used below for sorting strings (path names) into a deterministic order.
+         */
+        String.prototype.hashCode = function(){
+            var hash = 0;
+            if (this.length == 0) return hash;
+            for (var i = 0; i < this.length; i++) {
+                var char = this.charCodeAt(i);
+                hash = ((hash<<5)-hash)+char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash;
+        }
+
         // A study is clicked.
         $scope.clickStudy = function(patient, study, highlightStudy) {
             if(!highlightStudy){
@@ -156,11 +181,53 @@
             }
             cohortFactory.getSeries(patient, study).then(function(series) {
                 //$log.log('series in response:', series);
+                //console.log("Returned from cohortFactory.getSeries(): " + JSON.stringify(series));
                 for (var i = 0; i < series.length; ++i) {
                     if(!seriesIds.includes(series[i].id)){
+                        series[i].timeStamp = cohortFactory.getSeriesTimeStamp(series[i], $scope.executionList);
+                        series[i].derivedFrom = cohortFactory.getSeriesDerivedFrom(series[i], $scope.executionList);
                         $scope.patients[patientIdx].studies[studyIdx].series.push(series[i]);
                     }
                 }
+                // Sort the series for the current patient/study.
+                $scope.patients[patientIdx].studies[studyIdx].series = $scope.patients[patientIdx].studies[studyIdx].series.sort(function(a, b) {
+                    var pString = "primary";
+                    var uString = "unknown";
+                    if (a.timeStamp === pString && b.timeStamp === pString) {
+                        return b.path.hashCode() - a.path.hashCode();  // give a pair of primary series a deterministic sort order.
+                    }
+                    else if (a.timeStamp === uString && b.timeString === uString)
+                        return 0;  // a pair of unknown series can sort in any order
+                    else if (a.timeStamp === uString && b.timeStamp === pString)
+                        return 1;  // an unknown series should always come after a primary series
+                    else if (a.timeStamp === pString && b.timeStamp === uString)
+                        return -1;  // a primary series should always come before an unknown series
+                    else if (a.timeStamp === uString)
+                        return 1;  // an unknown series always comes after a primary or derived series
+                    else if (b.timeStamp === uString)
+                        return -1;  // an unknown series always comes after a primary or derived series
+                    else if (a.timeStamp === pString) { // For a primary and a derived series...
+                        if (b.derivedFrom === a.path)
+                            return -1 // ... if the derived series derives from the primary, it sorts after the primary.
+                        else
+                            // ... else the derived series sorts the way its primary sorts relative to the other primary
+                            return b.derivedFrom.hashCode() - a.path.hashCode();
+                    } else if (b.timeStamp === pString) {  // Similar logic to case above, but with roles reversed
+                        if (a.derivedFrom === b.path)
+                            return 1;
+                        else
+                            return b.path.hashCode() - a.derivedFrom.hashCode();
+                    }
+                    else { // two derived series
+                        if (a.derivedFrom === b.derivedFrom)  // both derived from same primary series
+                            return a.timeStamp-b.timeStamp;   // sort based on timestamp
+                        else {
+                            return b.derivedFrom.hashCode() - a.derivedFrom.hashCode(); // sort the way the parent primaries sort
+                        }
+
+                    }
+                });
+                //console.log("After calling getSeries(), the series structure is " + JSON.stringify($scope.patients[patientIdx].studies[studyIdx].series));
             })
                 .catch(function(reason){
                     console.log('Failed to load series due to ' + reason);

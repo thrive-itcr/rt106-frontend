@@ -126,6 +126,66 @@
         return deferred.promise;
     }
 
+      /*
+       * Get the timestamp for the given series if possible.
+       * seriesStruct is the JSON structure the describes the specific series.
+       * executionStruct is the JSON structure that describes all of the execution records.
+       * In the future, this could instead be a database query to the execution database.
+       * Only derived series are expected to have meaningful timestamps.
+       * We assume that primary series do not have meaningful timestamps.
+       * If no meaningful timestamp can be found, return 0.
+       */
+    function getSeriesTimeStamp(seriesStruct, executionStruct) {
+        if (seriesStruct.eid == "primary") {
+            return 'primary';
+        } else {
+            var seriesPath = seriesStruct.path;
+            // Look through the execution records to find a record where this series path was a result.
+            for (var e=0; e<executionStruct.length; e++) {
+                var executionDetails = executionStruct[e].details;
+                for (var d=0; d<executionDetails.length; d++) {
+                    var detail = executionDetails[d];
+                    if (detail.source == "result" && detail.value == seriesPath) {
+                        return executionStruct[e].requestTime;
+                    }
+                }
+            }
+            return 'unknown';
+        }
+    }
+
+      // Return the series that that the given series is derived from.
+      // For primary series return null.
+      // If the derived series cannot be determined return null.
+      function getSeriesDerivedFrom(seriesStruct, executionStruct) {
+          if (seriesStruct.eid == "primary") {
+              return null;
+          } else {
+              var seriesPath = seriesStruct.path;
+              // Look through the execution records to find a record where this series path was a result.
+              for (var e=0; e<executionStruct.length; e++) {
+                  var derivedFrom = null;
+                  var matchFound = false;
+                  var executionDetails = executionStruct[e].details;
+                  for (var d=0; d<executionDetails.length; d++) {
+                      var detail = executionDetails[d];
+                      if (detail.source == "context" && detail.name == "inputSeries") {
+                          derivedFrom = detail.value;
+                      }
+                      if (detail.source == "result" && detail.value == seriesPath) {
+                          matchFound = true;
+                      }
+                  }
+                  if (matchFound) {
+                      if (derivedFrom != null) {
+                          return derivedFrom;
+                      }
+                  }
+              }
+              return null;
+          }
+      }
+
     var factory = {};
     factory.getPatients = function(){
         return getPatients();
@@ -136,7 +196,13 @@
     factory.getSeries = function(patient, study){
         return getSeries(patient, study);
     }
+    factory.getSeriesTimeStamp = function(seriesStruct, executionStuct){
+        return getSeriesTimeStamp(seriesStruct, executionStuct);
+    }
+      factory.getSeriesDerivedFrom = function(seriesStruct, executionStuct){
+          return getSeriesDerivedFrom(seriesStruct, executionStuct);
+      }
 
-    return factory;
+      return factory;
   }]);
 }));
