@@ -1,3 +1,5 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 /*
  * NOTE:  This is not structured as a proper AngularJS service, because it is called by imageViewers.js, which is also
  *        not a proper AngularJS component.

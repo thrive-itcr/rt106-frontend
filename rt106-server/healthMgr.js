@@ -1,3 +1,5 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 const numSeconds = 500;  // Check health every 5 minutes.  The period can be made shorter.
 const PORT = 8106;  // MUST BE THE SAME AS rt106-server.js.
 

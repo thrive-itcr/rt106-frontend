@@ -1,6 +1,8 @@
 # rt106-frontend
 [![Build Status](http://ideker.crd.ge.com:8888/buildStatus/icon?job=rt106/rt106-frontend/master)](http://ideker.crd.ge.com:8888/job/rt106/job/rt106-frontend/job/master/)
 
+__Copyright (c) General Electric Company, 2017.  All rights reserved.__
+
 This front-end to Rt 106 contains both REST endpoints for Rt 106 and web application components
 in AngularJS.
 

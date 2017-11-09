@@ -1,3 +1,5 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 // make this module work with RequireJS or as a browser global
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {

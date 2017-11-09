@@ -1,3 +1,4 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
 
 describe('promise chaining', function() {
   it('should propagate rejects', function(done) {

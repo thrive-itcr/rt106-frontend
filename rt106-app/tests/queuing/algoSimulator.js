@@ -1,3 +1,5 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 /*
     Receive AMQP requests to run an algorithm in Rt 106.
     Wait a random amount of time, then send the response message for each request.
