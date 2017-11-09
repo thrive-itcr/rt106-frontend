@@ -37,10 +37,12 @@
           <nav class="nav nav-pills nav-fill" id="patientTab" role="tablist">
             <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#patients">Patients</a>
             <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#patientdetails">Patient Details</a>
+            <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#seriesexections">Series Executions</a>
           </nav>
 
           <div class="tab-content">
 
+            <!-- PATIENTS TAB -->
             <div role="tabpanel" class="tab-pane fade in active" id="patients">
               <div id="patientsection" ng-scrollbar rebuild-on="rebuild:me" ng-init="highlightPatients=[]">
                 <table class="table">
@@ -58,6 +60,7 @@
               </div>
             </div>
 
+            <!-- PATIENT DETAILS TAB -->
             <div role="tabpanel" class="tab-pane fade in active" id="patientdetails">
               <div id="detailsection" ng-scrollbar rebuild-on="rebuild:me">
                 <h3>Patient:  {{ selectedPatient.patientName }}</h3>
@@ -85,6 +88,44 @@
                           <td>{{ oneSeries.id }}</td>
                           <td>{{ oneSeries.timeStamp | date : 'MMM d, yyyy h:mm a' }}</td>
                           <td>{{ oneSeries.eid | seriesFilter }}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- SERIES EXECUTIONS TAB -->
+            <div role="tabpanel" class="tab-pane fade in active" id="seriesexections">
+              <h3>Execution History</h3>
+              <h5>{{ selectedSeries[0] }}</h5>
+              <div class="fixed-height" ng-scrollbar rebuild-on="rebuild:me">
+                <table class="table">
+                  <tr>
+                    <th>Algorithm</th>
+                    <th>Start Time</th>
+                    <th>Status</th>
+                  </tr>
+                  <tr ng-repeat-start="execItem in executionList | filter : { input : selectedSeries[0] }" ng-click="expandResult = !expandResult;clickResult(execItem,expandResult)" ng-class="{'tr-active':expandResult==true}">
+                    <td>{{ execItem.analyticName }}</td>
+                    <td>{{ execItem.requestTime | date : 'MMM d, yyyy h:mm a' }}</td>
+                    <td>{{ execItem.status }}</td>
+                  </tr>
+                  <tr ng-repeat-end ng-show="expandResult">
+                    <td colspan="3">
+                      <h3>Details</h3>
+                      <table class="table">
+                        <tr>
+                          <th>Source</th>
+                          <th>Result</th>
+                          <th>Value</th>
+                        </tr>
+                        <!-- Iterate through the result list here. -->
+                        <tr ng-repeat="detailItem in execItem.details">
+                          <td>{{ detailItem.source }}</td>
+                          <td>{{ detailItem.name }}</td>
+                          <td>{{ detailItem.value }}</td>
                         </tr>
                       </table>
                     </td>
