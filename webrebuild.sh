@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) General Electric Company, 2017.  All rights reserved.
 
 echo ""
 echo "Removing web container."

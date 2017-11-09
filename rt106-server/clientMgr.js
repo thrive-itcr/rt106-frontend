@@ -1,9 +1,11 @@
- /*
-  *   Rt 106 - Client Manager module.
-  *   Manage the identities of the web clients connected to the server.
-  *   Maintain an AMQP response queue for each client.
-  *   Clean up when a client becomes idle.
-  */
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
+/*
+ *   Rt 106 - Client Manager module.
+ *   Manage the identities of the web clients connected to the server.
+ *   Maintain an AMQP response queue for each client.
+ *   Clean up when a client becomes idle.
+ */
 
  /*
   * TODO:  There is code in this file for saving client-specific data in clientMgr.executionList, clientMgr.lastTouched,

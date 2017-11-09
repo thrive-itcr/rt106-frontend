@@ -1,3 +1,5 @@
+# Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 FROM alpine:3.6
 
 # update the image, add node and git (for bower)

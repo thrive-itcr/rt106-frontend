@@ -1,3 +1,5 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
+
 /*
  *   Rt 106 - AMQP Manager module.
  *   Manage interactions with AMQP (RabbitMQ) queues.

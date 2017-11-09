@@ -1,5 +1,7 @@
 # Internal App
 
+__Copyright (c) General Electric Company, 2017.  All rights reserved.__
+
 The ```public``` folder serves a simple Rt 106 application to allow developers a
 simple way to exercise Rt 106.  This application is not meant to be a full example
 of Rt 106, nor is it meant to be a seed application that a user would extend.  Please see

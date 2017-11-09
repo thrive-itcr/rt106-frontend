@@ -1,3 +1,4 @@
+// Copyright (c) General Electric Company, 2017.  All rights reserved.
 
 const express      = require('express');
 const cookieParser = require('cookie-parser'); // used to give each web client its own unique ID.
