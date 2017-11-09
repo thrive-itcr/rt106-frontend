@@ -545,32 +545,42 @@ rt106server.use('/v1/datastore/*', function (req, res) {
   }
 });
 
-rt106server.get('/v1/dataconvert/csvtojson/v1/pathology/datafile/:slide/:region/:branch/:channel', function(req, res) {
+rt106server.get('/v1/dataconvert/csvtojson/v1/pathology/datafile/Slides/:slide/:region/:pipelineid/:execid', function(req, res) {
   winston.debug('OriginalURL: ' + req.originalUrl);
-  var url = req.originalUrl.replace(/^\/v1\/dataconvert\/csvtojson\/v1\/pathology\/datafile/, 'http://datastore:5000/v1/pathology/image');
-  winston.debug('Rerouting OriginalURL to: ' + url);
-  rp({uri: url, headers: {}})
-      .then(function(csvData) {
-        // Convert the csv data to JSON.
-        winston.debug("Received CSV data: " + csvData);
-        var jsonData = {};
-        jsonData.cells = [];
-        csv()
-            .fromString(csvData)
-            .on('json', (jsonObj) => {
-              winston.debug("jsonObj is " + JSON.stringify(jsonObj));
-              jsonData.cells.push(jsonObj);
-            })
-          .on('done',(error)=> {
-            winston.debug('end parsing CSV');
-            winston.debug("jsonData is " + JSON.stringify(jsonData));
-            res.status(200).json(jsonData);
-          })
+  // Get the path to the csv data file.
+  var csvpathsURI = datastoreURI + '/pathology/slides/' + req.params.slide + '/regions/' + req.params.region + '/results/' + req.params.pipelineid +
+      '/steps/' + req.params.execid + '/instances'
+  winston.debug('csvpathsURI: ' + csvpathsURI);
+  rp({uri: csvpathsURI, headers: {}})
+      .then(function(instances) {
+          winston.debug("Returned instances: " + JSON.stringify(instances));
+          csvpath = JSON.parse(instances)[0]
+          winston.debug("csvpath is " + csvpath);
+          // Get the csv data from the csvpath.
+          var csvdataURI = datastoreURI + '/instance' + csvpath + '/csv';
+          rp({uri: csvdataURI, headers: {}})
+              .then(function(csvData) {
+                    // Convert the csv data to JSON.
+                    winston.debug("Received CSV data: " + csvData);
+                    var jsonData = {};
+                    jsonData.cells = [];
+                    csv()
+                        .fromString(csvData)
+                        .on('json', (jsonObj) => {
+                            winston.debug("jsonObj is " + JSON.stringify(jsonObj));
+                            jsonData.cells.push(jsonObj);
+                        })
+                        .on('done',(error)=> {
+                            winston.debug('end parsing CSV');
+                            winston.debug("jsonData is " + JSON.stringify(jsonData));
+                            res.status(200).json(jsonData);
+                        })
+              })
+              .catch(function (err) {
+                    winston.error(err);
+                    res.status(500).json("Error in call to /v1/dataconvert: " + err);
+              });
       })
-      .catch(function (err) {
-        winston.error(err);
-        res.status(500).json("Error in call to /v1/dataconvert: " + err);
-      });
 });
 
 // Health checks.  Return list of bad services.
