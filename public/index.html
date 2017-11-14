@@ -38,13 +38,13 @@
           <nav class="nav nav-pills nav-fill" id="patientTab" role="tablist">
             <a class="nav-item nav-link active" role="tab" data-toggle="tab" href="#patients">Patients</a>
             <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#patientdetails">Patient Details</a>
-            <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#seriesexections">Series Executions</a>
+            <a class="nav-item nav-link" role="tab" data-toggle="tab" href="#seriesexecs">Series Executions</a>
           </nav>
 
           <div class="tab-content">
 
             <!-- PATIENTS TAB -->
-            <div role="tabpanel" class="tab-pane fade in active" id="patients">
+            <div role="tabpanel" class="tab-pane" id="patients">
               <div id="patientsection" ng-scrollbar rebuild-on="rebuild:me" ng-init="highlightPatients=[]">
                 <table class="table">
                   <tr>
@@ -62,7 +62,7 @@
             </div>
 
             <!-- PATIENT DETAILS TAB -->
-            <div role="tabpanel" class="tab-pane fade in active" id="patientdetails">
+            <div role="tabpanel" class="tab-pane" id="patientdetails">
               <div id="detailsection" ng-scrollbar rebuild-on="rebuild:me">
                 <h3>Patient:  {{ selectedPatient.patientName }}</h3>
                 <br>
@@ -98,10 +98,10 @@
             </div>
 
             <!-- SERIES EXECUTIONS TAB -->
-            <div role="tabpanel" class="tab-pane fade in active" id="seriesexections">
-              <h3>Execution History</h3>
-              <h5>{{ selectedSeries[0] }}</h5>
-              <div class="fixed-height" ng-scrollbar rebuild-on="rebuild:me">
+            <div role="tabpanel" class="tab-pane" id="seriesexecs">
+              <div id="execsection" ng-scrollbar rebuild-on="rebuild:me">
+                <h3>Execution History</h3>
+                <h5>{{ selectedSeries[0] }}</h5>
                 <table class="table">
                   <tr>
                     <th>Algorithm</th>
@@ -138,6 +138,7 @@
           </div>
 
         </div>
+
         <!-- END PATIENT SELECTION -->
 
         <!-- IMAGE TOOLS -->

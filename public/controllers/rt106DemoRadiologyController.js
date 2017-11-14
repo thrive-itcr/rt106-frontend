@@ -82,7 +82,11 @@
         function showDetails() {
             $('#patientTab a[href="#patientdetails"]').tab('show');
         }
+        function showExecs() {
+            $('#patientTab a[href="#seriesexecs"]').tab('show');
+        }
         function refreshBootstrap() {
+            setTimeout(showExecs,   2500);
             setTimeout(showDetails, 3000);
             setTimeout(showPatients,3500);
         }
@@ -95,8 +99,10 @@
             document.getElementById('toprow').style.maxHeight = fullheight;
             document.getElementById('patientsection').style.minHeight = height;
             document.getElementById('detailsection').style.minHeight = height;
+            document.getElementById('execsection').style.minHeight = height;
             document.getElementById('patientsection').style.maxHeight = height;
             document.getElementById('detailsection').style.maxHeight = height;
+            document.getElementById('execsection').style.maxHeight = height;
         }
 
         function topRowTall() {
@@ -252,8 +258,10 @@
                 $scope.imageLayout = dynamicDisplayService.setDisplayShape("1,1");
                 dynamicDisplayService.displayInCell(imageFormat, accessPath, {}, 0, 0, $scope.imageLayout, 'rgb(255,255,255)', 1.0);
                 $scope.selectedSeries[0] = accessPath;
+                console.log("$scope.selectedSeries is " + $scope.selectedSeries);
             } else { // !highlightSeries
                 $scope.selectedSeries = [];
+                console.log("$Scope.selectedSeries has been cleared.");
             }
         }
         $scope.clickSeries1 = function(patient, study, series, highlightSeriesArray, patientIndex, studyIndex, seriesIndex) {
@@ -301,6 +309,7 @@
 
         // The Execute button is clicked.
         $scope.requestAlgoRun = function() {
+            console.log("Called $scope.requestAlgoRun()");
             executionService.autofillRadiologyParameters($scope.selectedParameters, $scope.selectedSeries).then(function() {
               executionService.requestAlgoRun($scope.selectedParameters, $scope.selectedAlgo[0]);
             });
