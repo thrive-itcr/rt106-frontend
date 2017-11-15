@@ -90,36 +90,50 @@
     /*
      * Request an algorithm run from the GUI.
      */
+
     this.autofillRadiologyParameters = function(selectedParameters, selectedSeries) {
-      // Perform any special handling required for parameters.
-      // Autofill some parameters.
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(outerResolve, outerReject) {
+        // Perform any special handling and autofill required for parameters.
+        var probePromiseArray = [];
         for (var paramName in selectedParameters) {
-          // Handling probes / seed points.  Consider moving this to the dynamicDisplayService.
-          if (selectedParameters[paramName].type == "voxelIndex") {
-            var frame = $("#imageWrapper1")[0];
-            var element = cornerstoneLayers.getImageElement(frame);
-            var probeToolState = cornerstoneTools.getToolState(element, 'probe');
-            var stackToolState = cornerstoneTools.getToolState(element, 'stack');
-            if (undefined != probeToolState) {
-              // var x = Math.round(probeToolState.data[0].handles.end.x);
-              // var y = Math.round(probeToolState.data[0].handles.end.y);
-              var z = stackToolState.data[0].currentImageIdIndex;
-              var promise = imageViewers.getProbes(stackToolState.data[0].stackId);
-              promise.then(function(probeList) {
-                selectedParameters[paramName].default = probeList[0];
-                resolve();
+            // Any parameter that waits for a promise to be resolved should create a promise here and add it to probePromiseArray.
+            // One example is when we get probes / seed points.
+            if (selectedParameters[paramName].type == "voxelIndex") {
+              var paramPromise = new Promise(function(resolve, reject) {
+                  var frame = $("#imageWrapper1")[0];
+                  var element = cornerstoneLayers.getImageElement(frame);
+                  var probeToolState = cornerstoneTools.getToolState(element, 'probe');
+                  var stackToolState = cornerstoneTools.getToolState(element, 'stack');
+                  if (undefined != probeToolState) {
+                      // var x = Math.round(probeToolState.data[0].handles.end.x);
+                      // var y = Math.round(probeToolState.data[0].handles.end.y);
+                      var z = stackToolState.data[0].currentImageIdIndex;
+                      var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, paramName);
+                      probePromise.then(function(result) {
+                          selectedParameters[result.clientData].default = result.probeList[0];
+                          resolve();
+                      }).catch(function(error) {
+                          reject(error);
+                      });
+                  } else {
+                      resolve(); // no probes.
+                  }
               });
+              probePromiseArray.push(paramPromise);
+            }
+            if (selectedParameters[paramName].type == "series") {
+              if (selectedSeries.length == 1)
+                selectedParameters[paramName].default = selectedSeries[0];
+              else // Put the entire list.
+                selectedParameters[paramName].default = selectedSeries;
             }
           }
-          if (selectedParameters[paramName].type == "series") {
-            if (selectedSeries.length == 1)
-              selectedParameters[paramName].default = selectedSeries[0];
-            else // Put the entire list.
-              selectedParameters[paramName].default = selectedSeries;
-          }
-        }
-      });
+          Promise.all(probePromiseArray).then(function() {
+              outerResolve();
+          }).catch(function(error) {
+              outerReject("autofillRadiologyParameters(), error in probePromiseArray: " + error);
+          })
+        });
     }
 
     this.autofillPathologyParameters = function(selectedParameters, selectedSlide, selectedRegion, selectedChannel, selectedPipeline, forceOverwrite) {
@@ -143,10 +157,10 @@
     }
 
     this.requestAlgoRun = function(selectedParameters, selectedAlgo) {
+      console.log("called executionService.requestAlgoRun() with selectedParameters " + JSON.stringify(selectedParameters) + " and selectedAlgo " + selectedAlgo);
       var keyList = Object.keys(selectedParameters);
       var paramLength = keyList.length
       var context_data = {};
-      $log.log("executionService.requestAlgoRun, selectedAlgo is " + selectedAlgo);
       for (var i = 0; i < paramLength; i++) {
         var param = keyList[i];
         var required = selectedParameters[param].required;

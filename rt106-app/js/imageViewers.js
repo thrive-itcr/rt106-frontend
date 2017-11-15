@@ -983,7 +983,9 @@ if (typeof imageViewers === 'undefined') {
     return colorStrArr;
   }
 
-  function getProbes(stackId) {
+  // getProbes could be called multiple asynchronous times.
+  // To keep the various calls properly sorted, some clientData is passed in that is passed back when the promise is resolved.
+  function getProbes(stackId, clientData) {
     return new Promise(function(resolve, reject) {
       var probeList = [];
       var promises = [];
@@ -1002,12 +1004,12 @@ if (typeof imageViewers === 'undefined') {
               probeList.push([x, y, z]);
             }
           }).catch(function (error) {
-            console.log("getProbes(), error in promise");
+            console.logError("getProbes(), error in promise");
           });
         }
       });
       Promise.all(promises).then(function() {
-          resolve(probeList);
+          resolve({ 'probeList' : probeList, 'clientData' : clientData });
       }).catch(function(error) {
           reject("getProbes(), error in promises: " + error);
       })
