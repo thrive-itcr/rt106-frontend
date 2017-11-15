@@ -157,7 +157,6 @@
     }
 
     this.requestAlgoRun = function(selectedParameters, selectedAlgo) {
-      console.log("called executionService.requestAlgoRun() with selectedParameters " + JSON.stringify(selectedParameters) + " and selectedAlgo " + selectedAlgo);
       var keyList = Object.keys(selectedParameters);
       var paramLength = keyList.length
       var context_data = {};
