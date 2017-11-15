@@ -68,3 +68,7 @@ body {
   width: 150px;
   padding: 0px;
 }
+
+.w3-progressbar {
+  background-color: #85C1E9;
+}
