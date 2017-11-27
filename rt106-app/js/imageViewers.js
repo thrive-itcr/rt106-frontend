@@ -1007,6 +1007,10 @@ if (typeof imageViewers === 'undefined') {
           });
         }
       });
+      /* The line below can be used to test error handling.
+       * reject("deliberate error from imageViewers.getProbes()");
+       * (Comment the block below if trying this.)
+       */
       Promise.all(promises).then(function() {
           resolve({ 'probeList' : probeList });
       }).catch(function(error) {

@@ -92,7 +92,7 @@
      */
 
     this.autofillRadiologyParameters = function(selectedParameters, selectedSeries) {
-      return new Promise(function(outerResolve, outerReject) {
+      return new Promise(function(resolve, reject) {
         // Perform any special handling and autofill required for parameters.
         var promiseArray = [];
         for (var paramName in selectedParameters) {
@@ -100,7 +100,6 @@
             // One example is when we get probes / seed points.
             if (selectedParameters[paramName].type == "voxelIndex") {
                 (function (pName) {
-                    var paramPromise = new Promise(function(resolve, reject) {
                       var frame = $("#imageWrapper1")[0];
                       var element = cornerstoneLayers.getImageElement(frame);
                       var probeToolState = cornerstoneTools.getToolState(element, 'probe');
@@ -112,15 +111,10 @@
                           var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, pName);
                           probePromise.then(function(result) {
                               selectedParameters[pName].default = result.probeList[0];
-                              resolve();
-                          }).catch(function(error) {
-                              reject(error);
                           });
-                      } else {
-                          resolve(); // no probes.
+                          // No .catch is needed here.  An error returned from the promise is propagated all the way out.
                       }
-                    });
-                    promiseArray.push(paramPromise);
+                    promiseArray.push(probePromise);
                  })(paramName);
             }
             if (selectedParameters[paramName].type == "series") {
@@ -131,9 +125,9 @@
             }
           }
           Promise.all(promiseArray).then(function() {
-              outerResolve();
+              resolve();
           }).catch(function(error) {
-              outerReject("autofillRadiologyParameters(), error in promiseArray: " + error);
+              reject("autofillRadiologyParameters(), error in promiseArray: " + error);
           })
         });
     }
