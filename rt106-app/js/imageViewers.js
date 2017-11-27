@@ -984,8 +984,7 @@ if (typeof imageViewers === 'undefined') {
   }
 
   // getProbes could be called multiple asynchronous times.
-  // To keep the various calls properly sorted, some clientData is passed in that is passed back when the promise is resolved.
-  function getProbes(stackId, clientData) {
+  function getProbes(stackId) {
     return new Promise(function(resolve, reject) {
       var probeList = [];
       var promises = [];
@@ -1009,7 +1008,7 @@ if (typeof imageViewers === 'undefined') {
         }
       });
       Promise.all(promises).then(function() {
-          resolve({ 'probeList' : probeList, 'clientData' : clientData });
+          resolve({ 'probeList' : probeList });
       }).catch(function(error) {
           reject("getProbes(), error in promises: " + error);
       })

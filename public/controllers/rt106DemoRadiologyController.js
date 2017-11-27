@@ -313,7 +313,7 @@
             executionService.autofillRadiologyParameters($scope.selectedParameters, $scope.selectedSeries).then(function() {
               executionService.requestAlgoRun($scope.selectedParameters, $scope.selectedAlgo[0]);
             }).catch(function(error) {
-                console.logError("Error returned from autofillRadiologyParameters(): " + error);
+                console.error("Error returned from autofillRadiologyParameters(): " + error);
             });
         }
 

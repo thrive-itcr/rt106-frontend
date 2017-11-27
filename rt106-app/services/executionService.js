@@ -94,32 +94,34 @@
     this.autofillRadiologyParameters = function(selectedParameters, selectedSeries) {
       return new Promise(function(outerResolve, outerReject) {
         // Perform any special handling and autofill required for parameters.
-        var probePromiseArray = [];
+        var promiseArray = [];
         for (var paramName in selectedParameters) {
-            // Any parameter that waits for a promise to be resolved should create a promise here and add it to probePromiseArray.
+            // Any parameter that waits for a promise to be resolved should create a promise here and add it to promiseArray.
             // One example is when we get probes / seed points.
             if (selectedParameters[paramName].type == "voxelIndex") {
-              var paramPromise = new Promise(function(resolve, reject) {
-                  var frame = $("#imageWrapper1")[0];
-                  var element = cornerstoneLayers.getImageElement(frame);
-                  var probeToolState = cornerstoneTools.getToolState(element, 'probe');
-                  var stackToolState = cornerstoneTools.getToolState(element, 'stack');
-                  if (undefined != probeToolState) {
-                      // var x = Math.round(probeToolState.data[0].handles.end.x);
-                      // var y = Math.round(probeToolState.data[0].handles.end.y);
-                      var z = stackToolState.data[0].currentImageIdIndex;
-                      var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, paramName);
-                      probePromise.then(function(result) {
-                          selectedParameters[result.clientData].default = result.probeList[0];
-                          resolve();
-                      }).catch(function(error) {
-                          reject(error);
-                      });
-                  } else {
-                      resolve(); // no probes.
-                  }
-              });
-              probePromiseArray.push(paramPromise);
+                (function (pName) {
+                    var paramPromise = new Promise(function(resolve, reject) {
+                      var frame = $("#imageWrapper1")[0];
+                      var element = cornerstoneLayers.getImageElement(frame);
+                      var probeToolState = cornerstoneTools.getToolState(element, 'probe');
+                      var stackToolState = cornerstoneTools.getToolState(element, 'stack');
+                      if (undefined != probeToolState) {
+                          // var x = Math.round(probeToolState.data[0].handles.end.x);
+                          // var y = Math.round(probeToolState.data[0].handles.end.y);
+                          var z = stackToolState.data[0].currentImageIdIndex;
+                          var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, pName);
+                          probePromise.then(function(result) {
+                              selectedParameters[pName].default = result.probeList[0];
+                              resolve();
+                          }).catch(function(error) {
+                              reject(error);
+                          });
+                      } else {
+                          resolve(); // no probes.
+                      }
+                    });
+                    promiseArray.push(paramPromise);
+                 })(paramName);
             }
             if (selectedParameters[paramName].type == "series") {
               if (selectedSeries.length == 1)
@@ -128,10 +130,10 @@
                 selectedParameters[paramName].default = selectedSeries;
             }
           }
-          Promise.all(probePromiseArray).then(function() {
+          Promise.all(promiseArray).then(function() {
               outerResolve();
           }).catch(function(error) {
-              outerReject("autofillRadiologyParameters(), error in probePromiseArray: " + error);
+              outerReject("autofillRadiologyParameters(), error in promiseArray: " + error);
           })
         });
     }
