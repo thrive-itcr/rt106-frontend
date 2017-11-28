@@ -99,6 +99,7 @@
             // Any parameter that waits for a promise to be resolved should create a promise here and add it to promiseArray.
             // One example is when we get probes / seed points.
             if (selectedParameters[paramName].type == "voxelIndex") {
+                // Create a closure to keep the parameter name associated with the promise created below.
                 (function (pName) {
                       var frame = $("#imageWrapper1")[0];
                       var element = cornerstoneLayers.getImageElement(frame);
@@ -109,12 +110,12 @@
                           // var y = Math.round(probeToolState.data[0].handles.end.y);
                           var z = stackToolState.data[0].currentImageIdIndex;
                           var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, pName);
+                          promiseArray.push(probePromise);
                           probePromise.then(function(result) {
                               selectedParameters[pName].default = result.probeList[0];
                           });
                           // No .catch is needed here.  An error returned from the promise is propagated all the way out.
                       }
-                    promiseArray.push(probePromise);
                  })(paramName);
             }
             if (selectedParameters[paramName].type == "series") {
