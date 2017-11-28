@@ -109,11 +109,10 @@
                           // var x = Math.round(probeToolState.data[0].handles.end.x);
                           // var y = Math.round(probeToolState.data[0].handles.end.y);
                           var z = stackToolState.data[0].currentImageIdIndex;
-                          var probePromise = imageViewers.getProbes(stackToolState.data[0].stackId, pName);
-                          promiseArray.push(probePromise);
-                          probePromise.then(function(result) {
-                              selectedParameters[pName].default = result.probeList[0];
-                          });
+                          promiseArray.push(imageViewers.getProbes(stackToolState.data[0].stackId, pName)
+                              .then(function(result) {
+                                  selectedParameters[pName].default = result.probeList[0];
+                              }));
                           // No .catch is needed here.  An error returned from the promise is propagated all the way out.
                       }
                  })(paramName);
