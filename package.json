@@ -2,7 +2,7 @@
   "name": "rt106-frontend",
   "version": "1.0.0",
   "description": "Node server for Rt 106.",
-  "homepage": "https://github.com/pages/rt106/",
+  "homepage": "https://github.com/rt106/rt106/",
   "main": "rt106-server/rt106-server.js",
   "directories": {
     "test": "test"
@@ -24,7 +24,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.build.ge.com/rt106/rt106-frontend.git"
+    "url": "https://github.com/rt106/rt106-frontend.git"
   },
   "dependencies": {
     "amqplib": "^0.4.1",
