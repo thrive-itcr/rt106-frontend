@@ -8,7 +8,7 @@
   "description": "Rt 106 web application framework",
   "main": "rt106-app/js/rt106.js",
   "license": "BSD-3-Clause",
-  "homepage": "https://github.com/pages/rt106/",
+  "homepage": "https://github.com/rt106/rt106/",
   "private": true,
   "dependencies": {
     "cornerstone": "#0.12.2",
