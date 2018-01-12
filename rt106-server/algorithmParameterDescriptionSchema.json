@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema#",
-  "id": "http://needaplacetohostourschema/algorithmParameterDescriptionSchema.json",
+  "id": "https://raw.githubusercontent.com/rt106/rt106-frontend/master/rt106-server/algorithmParameterDescriptionSchema.json",
   "title": "Rt 106 Algorithm Parameter Description Schema",
   "description": "Parameter description schema for algorithms in Rt 106. In Rt 106, algorithms self-describe the parameters they require.",
 
