@@ -14,7 +14,6 @@ jobs:
           name: Build the Docker image
           command: |
             source $BASH_ENV
-            cd docker
             docker build -t rt106-dev/rt106-frontend:$DOCKER_TAG .
       - deploy:
           name: Deploy runtime image to Docker Hub/Cloud
