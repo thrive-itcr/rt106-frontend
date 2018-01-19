@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Rt 106 Local Demonstration</title>
+  <title>Rt 106 Demonstration</title>
 
   <!-- STYLE SHEET -->
   <link href="css/rt106DemoRadiologyStyles.css" rel="stylesheet" type="text/css">
@@ -15,6 +15,8 @@
   <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="bower_components/ng-scrollbar/dist/ng-scrollbar.css" rel="stylesheet" type="text/css">
   <link href="bower_components/angular-ui-grid/ui-grid.min.css" rel="stylesheet" type="text/css">
+
+  <link rel="shortcut icon" type="image/png" href="bower_components/rt106-frontend/rt106-app/assets/images/rt106_black_favicon.png">
 </head>
 
 <body>
@@ -23,7 +25,10 @@
     <!-- NAVIGATION BAR -- EXTEND WITH YOUR OWN APP'S BUTTONS! -->
 
     <nav class="navbar">
-      <h1 class="navbar-brand navbar-default mb=0">Route 106 Local Demonstration Application</h1>
+      <div>
+        <a href="#" class="navbar-left"><img src="bower_components/rt106-frontend/rt106-app/assets/images/rt106_white_75.png" title="Rt 106 Logo"></a>
+        <h1 class="navbar-brand navbar-default mb=0">Rt 106 Demonstration Application</h1>
+      </div>
     </nav>
 
     <!-- PATIENTS AND IMAGE VIEWER -->
@@ -179,7 +184,7 @@
 
         <!-- ALGORITHMS LIST -->
         <div class="col-lg-4 col-md-8 rt106-component">
-          <h2>Algorithms</h2>
+          <h3>Algorithms</h3>
 
           <button type="button" class="btn btn-primary" ng-disabled="disableExecute()" ng-click="requestAlgoRun()">Execute</button>
 
