@@ -33,7 +33,7 @@ if (process.env.Rt106_SERVER_HOST !== undefined) {
 }
 console.log("gulp setting Rt106_SERVER_URL to " + Rt106_SERVER_URL);
 var Rt106_APP_DIR = 'rt106-app';
-if (process.env.Rt106_SERVE_APP !== undefined) {
+if (process.env.Rt106_SERVE_APP === 'public') {  // special case
     Rt106_APP_DIR = process.env.Rt106_SERVE_APP;
 }
 gulp.task('default', function() {
@@ -233,6 +233,8 @@ if (process.env.Rt106_SERVE_APP) {
   } else {
     winston.info("Running Rt 106 with a user specified application from " + process.env.Rt106_SERVE_APP);
     rt106server.use('/', express.static(process.env.Rt106_SERVE_APP) );
+    rt106server.use('/bower_components/rt106-frontend/rt106-app/', express.static('rt106-app'));  // mimic the URI paths of real app that was "bower install --save rt106-frontend"
+    rt106server.use('/bower_components', express.static('public/bower_components'));  // Maybe these should be rt rt106/bower_components instead?  (Change .bowerrc.)
   }
 } else {
   winston.info("Rt106_SERVE_APP is not set.");
