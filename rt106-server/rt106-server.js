@@ -575,7 +575,21 @@ rt106server.use('/v1/datastore/*', function (req, res) {
       forward.headers['authorization'] = req.headers['authorization'];
     }
     winston.debug('Forwarding req: ' + JSON.stringify(forward));
-    request(forward).pipe(res);
+    if (req.method === 'GET') {
+        request(forward).pipe(res);
+    }
+    else if (req.method === 'POST') {
+        winston.debug("Piping the request to request.post(" + url + ")");
+        req.pipe(request.post(forward)
+            .on('response', function(response) {
+                winston.debug('Response received from post: ' + response.statusCode);
+                res.status(response.statusCode).end();
+            }));
+        winston.debug('Post sent to: ' + url);
+    }
+    else {
+        winston.error("Should never get here.");
+    }
   }
 });
 
